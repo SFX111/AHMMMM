@@ -1,0 +1,255 @@
+#LIST VIEW
+
+class CustomAdapter(context: Context,
+                    private val names: Array<String>,
+                    private val images: Array<Int>) :
+    ArrayAdapter<Int>(context, R.layout.item, images) {
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
+        val l:LayoutInflater = LayoutInflater.from(context)
+        val customView = l.inflate(R.layout.item, parent, false)
+//        customView.textView.text = names[position]
+//        customView.imageView.setImageResource(images[position])
+
+        return customView
+    }
+}
+
+
+#Media Palayer with switch ptn
+
+
+    <Button
+        android:id="@+id/play"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="start" />
+
+*********************
+
+play.setOnClickListener{
+            if (play.text=="start"){
+                mediaPlayer?.reset()
+                mediaPlayer = MediaPlayer.create(this, R.raw.music)
+                mediaPlayer.start()
+                play.text="stop"
+            }else if (play.text=="stop"){
+                mediaPlayer.stop()
+                play.text="start"
+            }
+        }
+        
+        
+#MediaPlayer 3 btn
+
+
+<LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/stopBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:srcCompat="@android:drawable/checkbox_off_background" />
+
+        <ImageButton
+            android:id="@+id/pauseBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:srcCompat="@android:drawable/ic_media_pause" />
+
+        <ImageButton
+            android:id="@+id/playBtn"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:srcCompat="@android:drawable/ic_media_play" />
+    </LinearLayout>
+
+
+
+**************************************************************************
+
+        var mediaPlayer: MediaPlayer=MediaPlayer()
+
+        playBtn.setOnClickListener {
+            if (mediaPlayer == null) {
+                mediaPlayer = MediaPlayer.create(this, R.raw.music)
+                //mediaPlayer = MediaPlayer.create(this, Uri.parse("http://commondatastorage.googleapis.com/codeskulptor-assets/sounddogs/thrust.mp3"))
+                mediaPlayer!!.isLooping = true
+                mediaPlayer!!.start()
+            } else mediaPlayer!!.start()
+        }
+
+        pauseBtn.setOnClickListener {
+            if (mediaPlayer != null && mediaPlayer!!.isPlaying){
+                mediaPlayer!!.pause()
+            }
+        }
+
+        stopBtn.setOnClickListener {
+            if (mediaPlayer != null) {
+                mediaPlayer!!.stop()
+                mediaPlayer!!.release()
+
+            }
+        }
+
+
+#normal dialog
+
+*************
+
+        shawDialog.setOnClickListener {
+            val builder=AlertDialog.Builder(this)
+            builder.setTitle("Title")
+            builder.setMessage("message")
+            builder.setPositiveButton("ok"){_: DialogInterface , Int ->
+                Toast.makeText(this,"ok",Toast.LENGTH_SHORT).show()
+            }
+            builder.setNegativeButton("no"){_: DialogInterface , Int ->
+                Toast.makeText(this,"ok",Toast.LENGTH_SHORT).show()
+
+            }
+            builder.setNeutralButton("cansle"){_: DialogInterface , Int ->
+                Toast.makeText(this,"ok",Toast.LENGTH_SHORT).show()
+            }
+            val dialog=builder.create()
+           dialog.show()
+        }
+
+#
+************************
+costom dialog 
+
+##CODE
+        var dialogInflater=LayoutInflater.from(this).inflate(R.layout.alert_item,null)
+        shawDialog2.setOnClickListener {
+            val builder=AlertDialog.Builder(this)
+            builder.setView(dialogInflater)
+            val dialog=builder.create()
+            dialog.show()
+            dialogInflater.cansle.setOnClickListener {
+                dialog.dismiss()
+            }
+        }
+
+
+
+##DESIGN
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="enter your name" />
+
+    <EditText
+        android:id="@+id/editTextTextPersonName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Name" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/cansle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="cansle" />
+
+        <Button
+            android:id="@+id/add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="add" />
+    </LinearLayout>
+</LinearLayout>
+
+
+
+**********************************************
+
+#NOTIFICATION
+
+    val id = 1
+        val ChannelId = "cId_1"
+
+        notification.setOnClickListener { 
+            val importance=NotificationManager.IMPORTANCE_HIGH
+            val mChannel=NotificationChannel("cId_1","name",importance)
+            val notification=NotificationCompat.Builder(this,ChannelId)
+                .setSmallIcon(R.drawable.ic_baseline_notifications_none_24)
+                .setContentTitle("APPLICATION")
+                .setContentText("THERE IS A NEW NOTIFICATION")
+                .build()
+            val mNotificationManager=getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            mNotificationManager.createNotificationChannel(mChannel)
+            mNotificationManager.notify(id,notification)
+
+        }
+        
+        
+#FRAGMENT NOTIFICATION
+
+ val id = 1
+                    val ChannelId = "cId_1"
+
+
+                    val CHANNEL_ID = "channel_id";
+                    val importance = NotificationManager.IMPORTANCE_HIGH;
+                    val myNotificationManager = getActivity()?.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager;
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        val myChannel = NotificationChannel(CHANNEL_ID, "Channel Name", importance);
+                        myNotificationManager.createNotificationChannel(myChannel);
+                    }
+                    val notification = NotificationCompat.Builder(requireActivity().applicationContext, CHANNEL_ID)
+                            .setSmallIcon(R.drawable.ic_launcher_background)
+                            .setContentTitle("title")
+                            .setContentText("text")
+                            .build();
+                    myNotificationManager.notify(2468, notification);
+                }
+                
+                
+#FRAGMENTS
+
+first.setOnClickListener {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment, First())
+                .commit()
+        }
+
+        second.setOnClickListener {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.fragment, Second())
+                .commit()
+        }
+        
+        
+#DATABASE
+
+
+
+
+
+
+
+
+
+
+
